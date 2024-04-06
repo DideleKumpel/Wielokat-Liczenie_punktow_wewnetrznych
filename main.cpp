@@ -28,7 +28,7 @@ public:
     void obliczPunktyWScinach();
     void obliczPole();
     void ObliczPunktyWWielokacie();
-    int PodajPunktyWWielokacie(); // korzytsa
+    int PodajPunktyWWielokacie(); // korzytujemy przeksztalcony wzor picka
     void Licz();
 };
 
@@ -60,7 +60,11 @@ int main() {
             kopiaPunkty[k].y=(stoi(pomocnicza));
         }
         Wielokaty[i].punkty=kopiaPunkty;
-
+    }
+    for(int i=0; i<LiczbaTestow; i++)
+    {
+        Wielokaty[i].Licz();
+        cout<<Wielokaty[i].PodajPunktyWWielokacie()<<endl;
     }
     return 0;
 }
@@ -113,11 +117,11 @@ bool porownajKat(punkt& p1, punkt& p2, punkt& centrum) {
 
 void wielokat::ObliczPunktyWWielokacie()
 {
-
+    PunktyWWielokacie= polePowierzni - 0.5 * punktyWScianach + 1;
 }
 int wielokat::PodajPunktyWWielokacie()
 {
-
+    return PunktyWWielokacie;
 }
 
 void wielokat::Licz()
