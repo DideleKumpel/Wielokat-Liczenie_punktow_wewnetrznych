@@ -1,13 +1,38 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <cmath>
+#include <numeric>
 
 using namespace std;
 
-struct wielokat{
-    int LiczbaPunktow=0;
-    vector<vector<int>> punkty;
+
+
+struct punkt{
+    int x,y;
 };
+
+bool porownajKat(punkt& p1, punkt& p2, punkt& centrum);
+
+class wielokat{
+    punkt centrumMasy;
+    double polePowierzni; //pole liczmy za pomoca shoelace formula
+    int punktyWScianach;
+    int PunktyWWielokacie;
+public:
+    int LiczbaPunktow;
+    vector<punkt> punkty;
+    void ObliczCentrumMasy();
+    void SortujPunkty(); //sortuje podane punkty przeciwnie do wskazowek zegara sortowanie te jest potrzebne do wykorzytsania shoelace formula
+    void obliczPunktyWScinach();
+    void obliczPole();
+    void ObliczPunktyWWielokacie();
+    int PodajPunktyWWielokacie(); // korzytsa
+    void Licz();
+};
+
+
 
 int main() {
     vector<vector<int>> kopiaPunkty (1, vector<int> (2));
@@ -17,7 +42,7 @@ int main() {
     for(int i=0; i<LiczbaTestow; i++)
     {
         cin>>Wielokaty[i].LiczbaPunktow;
-        vector<vector<int>> kopiaPunkty (Wielokaty[i].LiczbaPunktow , vector<int> (2));
+        vector<punkt> kopiaPunkty (Wielokaty[i].LiczbaPunktow);
         cin.ignore();
         for(int k=0; k<Wielokaty[i].LiczbaPunktow; k++)
         {
@@ -27,22 +52,79 @@ int main() {
             string pomocnicza;
             gdzieSpace = PunktyWString.find(' ');
             pomocnicza.insert(0, PunktyWString, 0, gdzieSpace);
-            kopiaPunkty[k][0]=(stoi(pomocnicza));
+            kopiaPunkty[k].x=(stoi(pomocnicza));
             pomocnicza.clear();
             SzukajOd = gdzieSpace + 1;
             gdzieSpace = PunktyWString.find(' ', SzukajOd);
             pomocnicza.insert(0, PunktyWString, SzukajOd, gdzieSpace - SzukajOd);
-            kopiaPunkty[k][1]=(stoi(pomocnicza));
+            kopiaPunkty[k].y=(stoi(pomocnicza));
         }
         Wielokaty[i].punkty=kopiaPunkty;
+
     }
     return 0;
 }
 
+void wielokat::ObliczCentrumMasy() {
+    double sumX=0, sumY=0;
+    for(int i=0; i<LiczbaPunktow; i++)
+    {
+        sumX+=punkty[i].x;
+        sumY+=punkty[i].y;
 
-/*NOTATKI
- * do obliczenia punktow gorzystany z wzór Picka https://pl.wikipedia.org/wiki/Wzór_Picka
- * Pole liczymy z SHOELANCE ALGORYTM https://www.101computing.net/the-shoelace-algorithm/
- * Liczbe punkty nalezace do scianek wielokatu z gcd(x2 - x1, y2 - y1)+1 where A=(x1, y1), B=(x2, y2) https://stackoverflow.com/questions/23729244/algorithm-to-calculate-the-number-of-lattice-points-in-a-polygon
- * przekształacmy wzor picka i wyliczamy ilosc punktow w srodku
- */
+    }
+    centrumMasy.x=sumX/LiczbaPunktow;
+    centrumMasy.y=sumY/LiczbaPunktow;
+}
+
+void wielokat::obliczPole()
+{
+    int sum1=0, sum2=0;
+    for(int i=0; i<LiczbaPunktow-1; i++)
+    {
+        sum1+=punkty[i].x*punkty[i+1].y;
+        sum2+=punkty[i].y*punkty[i+1].x;
+    }
+    sum1+=punkty[LiczbaPunktow-1].x*punkty[0].y;
+    sum2+=punkty[LiczbaPunktow-1].y*punkty[0].x;
+    polePowierzni=0.5*abs(sum1-sum2);
+}
+
+void wielokat::obliczPunktyWScinach() {
+    punktyWScianach=0;
+    for(int i=0; i<LiczbaPunktow-1; i++)
+    {
+            punktyWScianach+=gcd(punkty[i+1].x-punkty[i].x, punkty[i+1].y-punkty[i].y);
+    }
+    punktyWScianach+=gcd(punkty[LiczbaPunktow-1].x-punkty[0].x, punkty[LiczbaPunktow-1].y-punkty[0].y);
+}
+
+void wielokat::SortujPunkty() {
+    sort(punkty.begin(), punkty.end(), [&](punkt& p1, punkt& p2) {
+        return porownajKat(p1, p2, centrumMasy);
+    });
+}
+
+bool porownajKat(punkt& p1, punkt& p2, punkt& centrum) {
+    double kat1 = atan2(p1.y - centrum.y, p1.x - centrum.x);
+    double kat2 = atan2(p2.y - centrum.y, p2.x - centrum.x);
+    return kat1 < kat2;
+}
+
+void wielokat::ObliczPunktyWWielokacie()
+{
+
+}
+int wielokat::PodajPunktyWWielokacie()
+{
+
+}
+
+void wielokat::Licz()
+{
+    ObliczCentrumMasy();
+    SortujPunkty();
+    obliczPole();
+    obliczPunktyWScinach();
+    ObliczPunktyWWielokacie();
+}

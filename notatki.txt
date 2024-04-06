@@ -1,7 +1,8 @@
 /*NOTATKI
  * do obliczenia punktow gorzystany z wzór Picka https://pl.wikipedia.org/wiki/Wzór_Picka
  * Pole liczymy z SHOELANCE ALGORYTM https://www.101computing.net/the-shoelace-algorithm/
+ * aby wykorzytsac SHOELANCE ALGORYTM punkty musza byc posortowane przeciwnie do wskazoweg zegara
+ obliczyc srodek masy figury i wedlugeigo sortowac podane punkty wielokata
  * Liczbe punkty nalezace do scianek wielokatu z gcd(x2 - x1, y2 - y1)+1 where A=(x1, y1), B=(x2, y2) https://stackoverflow.com/questions/23729244/algorithm-to-calculate-the-number-of-lattice-points-in-a-polygon
  * przekształacmy wzor picka i wyliczamy ilosc punktow w srodku
- * jak z losowych punktow ulozyc wielokat
  */
