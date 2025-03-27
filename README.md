@@ -1,0 +1,1 @@
+Celem projektu jest obliczenie liczby punktów kratowych, które leżą wewnątrz wypukłego wielokąta, którego wierzchołki są zadane jako punkty kratowe. Do rozwiązania tego problemu wykorzystywany jest wzór Picka, który pozwala wyznaczyć liczbę punktów kratowych wewnętrznych wielokąta, znając jego pole oraz liczbę punktów kratowych na brzegu.
